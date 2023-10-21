@@ -28,60 +28,82 @@ import java.util.Scanner;
 public class Scheduler {
 
 	public static void main(String[] args) {
-		Days[] daysofTheWeek = new Days[6];
-		daysofTheWeek[0] = Days.MONDAY;	
-		daysofTheWeek[1] = Days.TUESDAY;	
-		daysofTheWeek[2] = Days.WEDNESDAY;	
-		daysofTheWeek[3] = Days.THURSDAY;	
-		daysofTheWeek[4] = Days.FRIDAY;	
-		daysofTheWeek[5] = Days.SATURDAY;
-		daysofTheWeek[6] = Days.SUNDAY;
+		Days[] arr = new Days[8];
+		for (int i = 1; i < 8; i++) {
+			arr[i] = Days.values()[i-1];
+		}
 		Boolean stopScheduler = false;
-		Boolean doneWithDay = false;
 		Scanner s = new Scanner(System.in);
 		while (stopScheduler == false) {
-			System.out.println("Welcome to your scheduler! Lets go through your schedule! What day do you wish to see? Press 1 for monday, all the way up to 7 for sunday.");
+			System.out
+					.println("Welcome to your scheduler! Lets go through your schedule! What day do you wish to see? \n"
+							+ "Press 1 for monday, all the way up to 7 for sunday. Press 0 to leave the scheduler");
 			String whatDay = s.nextLine();
-			if (whatDay.equalsIgnoreCase("1")) {
-				System.out.println("Do you want to add an event, view your events, or remove an event? Or, press b to move to the next day;");
+			int whatDayAsInt = Integer.parseInt(whatDay);
+			if (whatDayAsInt == 0) {
+				break;
+			} else {
+				boolean addorno = true;
+				System.out.println("Do you want to add an event, view your events, or remove an event?");
 				String choice = s.nextLine();
 				if (choice.equalsIgnoreCase("add")) {
-					System.out.println(
-							"Make sure to add earlier things first! Add the name of the event here and what time it is taking place");
+					System.out.println("Make sure to add earlier things first! Add the name of the event here");
 					String eventname = s.nextLine();
-					add(daysofTheWeek[0], eventname);
-				} else if (choice.equalsIgnoreCase("view")) {
-					Node<Day> h = daysofTheWeek[1].getHead();
-					for (int i = 0; i < m.size(); i++) {
-						System.out.println(h.getValue());
-						h = h.getNext();
+					System.out.println(
+							"What time will this be taking place? use military time from 1-24 without A.M. or P.M.");
+					String eventtime = s.nextLine();
+					Node<String> u = arr[whatDayAsInt].LinkedList().getHead();
+					for (int g = 0; g < arr[whatDayAsInt].LinkedList().size(); g++) {
+						if (u.getValue().contains(eventtime)) {
+							addorno = false;
+							System.out.println("You already have an event at this time. Sorry.");
+							break;
+						} else {
+							System.out.println("     dfgdfgdfg");
+							u = u.getNext();
+						}
+					}
+					if (addorno == true) {
+						add(arr[whatDayAsInt].LinkedList(), eventname, eventtime);
 					}
 
-				} else if (choice.equalsIgnoreCase("remove")){
-					System.out.println("give me the name of the event you want to remove!");
+				} else if (choice.equalsIgnoreCase("view")) {
+					if (arr[whatDayAsInt].LinkedList().size() != 0) {
+						Node<String> o = arr[whatDayAsInt].LinkedList().getHead();
+						for (int i = 0; i < arr[whatDayAsInt].LinkedList().size(); i++) {
+							System.out.println(o.getValue());
+							o = o.getNext();
+						}
+					} else {
+						System.out.println("You have no events here! Better start scheduling!");
+					}
+
+				} else if (choice.equalsIgnoreCase("remove")) {
+					System.out.println("Give me the name of the event you want to remove!");
 					String whichone = s.nextLine();
-					Node<String> h = m.getHead();
+					Node<String> h = arr[whatDayAsInt].LinkedList().getHead();
 					int counter = 0;
-					for (int i = 0; i < m.size(); i++) {
+					for (int i = 0; i < arr[0].LinkedList().size(); i++) {
 						if (h.getValue().equalsIgnoreCase(whichone)) {
 							break;
 						}
 						h = h.getNext();
-						counter+=1;
+						counter += 1;
 					}
-					m.remove(counter);
-				} else if (choice.equalsIgnoreCase("b")) {
-					doneWithDay = true;
+					arr[0].LinkedList().remove(counter);
 				}
 			}
 		}
+
 	}
 
-	public static void add(LinkedList <String> list, String event) {
-		list.add(event);
-		Node<String> n = new Node<String>(event);
+	public static void add(LinkedList<String> list, String event, String eventtime) {
+		String eventtitle = event + " " + eventtime;
+		list.add(eventtitle);
+		Node<String> n = new Node<String>(eventtitle);
 		if (list.size() == 0) {
 			list.setHead(n);
 		}
 	}
+
 }
